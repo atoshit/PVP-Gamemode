@@ -8,5 +8,6 @@ shared_scripts {
 }
 
 server_scripts {
-    'addons/defferals/server/*.lua'
+    'addons/defferals/server/*.lua',
+    'server/playerConnecting.lua'
 }
