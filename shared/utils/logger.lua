@@ -46,13 +46,9 @@ end
 --- @param module string: Module name
 --- @param message string: Message to log
 function log(level, module, message)
-    local debugMode <const> = tonumber(GetConvar("debugLevel"))
+    local debugLevel <const> = tonumber(GetConvar("debugLevel"))
 
-    if debugMode == 0 then
-        return
-    end
-
-    if debugMode == 1 and logLevels[level].debugLevel == 2 then
+    if debugLevel == 0 or logLevels[level].debugLevel > debugLevel then
         return
     end
 
