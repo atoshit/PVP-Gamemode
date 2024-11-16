@@ -1,11 +1,11 @@
 --- level string: info, error, warn, debug, success, log
 local logLevels <const> = {
-    ["info"] = "^9Info",
-    ["warn"] = "^3Warning",
-    ["debug"] = "^5Debug",
-    ["success"] = "^2Success",
-    ["trace"] = "^6Trace",
-    ["log"] = "^7Log",
+    ["info"] = { message = "^9Info", debugLevel = 1  },
+    ["warn"] = { message = "^3Warning", debugLevel = 1 },
+    ["debug"] = { message = "^5Debug", debugLevel = 2 },
+    ["success"] = { message = "^2Success", debugLevel = 1 },
+    ["trace"] = { message = "^6Trace", debugLevel = 2 },
+    ["log"] = { message = "^7Log", debugLevel = 1 },
 }
 
 local logQueue = {}
@@ -21,7 +21,7 @@ local function logMessage(level, module, message)
     end
 
     local timestamp = IsDuplicityVersion() and os.date("%d/%m/%Y %H:%M:%S") or "CLIENT"
-    local levelColor = logLevels[level] or "^7LOG"
+    local levelColor = logLevels[level].message or "^7LOG"
     local m = "[" .. timestamp .. " : " .. (module or "PVP-Gamemode") .. "] " .. levelColor .. ": " .. message .. "^7"
 
     print(m)
@@ -46,6 +46,16 @@ end
 --- @param module string: Module name
 --- @param message string: Message to log
 function log(level, module, message)
+    local debugMode <const> = tonumber(GetConvar("debugMode"))
+
+    if debugMode == 0 then
+        return
+    end
+
+    if debugMode == 1 and logLevels[level].debugLevel == 2 then
+        return
+    end
+
     logQueue[#logQueue + 1] = {level = level, module = module, message = message}
 
     if not isProcessingQueue then
