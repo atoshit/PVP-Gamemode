@@ -46,7 +46,7 @@ end
 --- @param module string: Module name
 --- @param message string: Message to log
 function log(level, module, message)
-    local debugMode <const> = tonumber(GetConvar("debugMode"))
+    local debugMode <const> = tonumber(GetConvar("debugLevel"))
 
     if debugMode == 0 then
         return
